@@ -1,17 +1,21 @@
-
+const connection = require('../database/connection');
 
 module.exports = {
 
-    async authorizate (req, res ) {
+    async authorizate (req, res) {
 
         const { id } =  req.body;
 
-        const drugstore = knex('drugstores').where('id', id)
+        const drugstore = await connection('drugstores')
+        .where('drugstore_id', id)
+        .select('*')
+        .first();
+        
 
         if(!drugstore) {
-            return res.status(400).json('nao achei')
+            return res.status(400).json({nao : 'nao achei'})
         }
-        return alert('boa');
+        return res.json(drugstore);
     }          
 
 }
