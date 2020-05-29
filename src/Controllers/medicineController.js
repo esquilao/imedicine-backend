@@ -1,4 +1,5 @@
 const connection = require('../database/connection');
+const uuid = require('uuid');
 
 module.exports = {
 
@@ -30,8 +31,9 @@ module.exports = {
 
     async create (req, res) {
 
+        const product_id = uuid.v4();
+
         const {
-          product_id,
           name,
           price,
           drugstore_id  
@@ -39,7 +41,7 @@ module.exports = {
 
         await connection('medicines')
         .insert({
-          product_id,
+          product_id,  
           name,
           price,
           drugstore_id   
