@@ -33,10 +33,11 @@ module.exports = {
 
         const product_id = uuid.v4();
 
+        const drugstore_id = req.headers.authorization;
+
         const {
           name,
-          price,
-          drugstore_id  
+          price
         } = req.body;
 
         await connection('medicines')
@@ -66,20 +67,18 @@ module.exports = {
     
     async change(req, res) {
 
-        const {id} =  req.params;
+        const drugstore_id = req.headers.authorization;
 
         const {
-            product_id,
             name,
             price,
-            drugstore_id
+            product_id
         } = req.body;
 
         const data = {
-            product_id,
             name,
             price,
-            drugstore_id
+            product_id
         }
 
         const dados = Object.entries(data);
@@ -96,7 +95,8 @@ module.exports = {
             console.log(dadosEmJson);
 
             await connection('medicines')
-            .where('product_id', id)
+            .where('drugstore_id', drugstore_id)
+            .where('product_id', product_id)
             .update(dadosEmJson)
 
             return res.json({ atualizado : 'voce atualizou'})

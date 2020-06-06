@@ -20,12 +20,14 @@ routes.put('/drugstores/:id', drugstoreController.change);
 //rotas dos medicamentos
 routes.get('/medicines', medicineController.getAll);
 
+routes.get('/profile', authController.getProfile);
+
 routes.get('/medicines/:id', medicineController.getById);
 
 routes.post('/medicines', medicineController.create);
 
 routes.delete('/medicines/:id', medicineController.delete);
 
-routes.put('/medicines/:id', medicineController.change);
+routes.put('/medicines', medicineController.change);
 
 module.exports = routes;
