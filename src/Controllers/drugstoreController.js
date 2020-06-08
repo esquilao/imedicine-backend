@@ -1,11 +1,14 @@
 const connection = require('../database/connection');
 const uuid = require('uuid');
+const multer = require('multer');
 
 module.exports = {
     
     async create(req, res) {
-
+        
         const drugstore_id = uuid.v4();
+        const image = req.file;
+        
         const {
             name,
             email,
@@ -19,6 +22,7 @@ module.exports = {
             drugstore_id,
             name,
             email,
+            image : image.path,
             whatsapp,
             city,
             state,

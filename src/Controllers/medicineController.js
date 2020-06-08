@@ -1,5 +1,8 @@
 const connection = require('../database/connection');
-const uuid = require('uuid');
+const crypto = require('crypto');
+const imgurApi = require('../services/imgurApi/api');
+const FormData = require('form-data');
+const fs = require('fs');
 
 module.exports = {
 
@@ -31,7 +34,16 @@ module.exports = {
 
     async create (req, res) {
 
-        const product_id = uuid.v4();
+        const data = new FormData();
+        
+        data.append('image', fs.createReadStream(req.file.path));
+        
+        const response = await imgurApi.post( '/3/upload', data , { headers: {
+            "Content-Type": `multipart/form-data; boundary=${data._boundary}` , 
+            "Authorization" : "Client-ID f573d680751f416"
+        }})
+        
+        const product_id = crypto.randomBytes(2).toString("HEX")
 
         const drugstore_id = req.headers.authorization;
 
@@ -45,10 +57,19 @@ module.exports = {
           product_id,  
           name,
           price,
+          image: response.data.data.link,
           drugstore_id   
         })
-
+        
+        fs.unlink(req.file.path, (err) => {
+            if (err) {
+                console.error(err)
+                return
+            }
+        })
         return res.json({ mec : `ta criado o remédio de numero ${product_id}`});
+
+       
     },
     
     async delete(req, res) {
@@ -68,11 +89,11 @@ module.exports = {
     async change(req, res) {
 
         const drugstore_id = req.headers.authorization;
+        const product_id = req.params.id;
 
         const {
             name,
-            price,
-            product_id
+            price
         } = req.body;
 
         const data = {
@@ -92,8 +113,6 @@ module.exports = {
 
         }},{})   
         
-            console.log(dadosEmJson);
-
             await connection('medicines')
             .where('drugstore_id', drugstore_id)
             .where('product_id', product_id)

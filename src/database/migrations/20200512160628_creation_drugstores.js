@@ -1,6 +1,7 @@
 
 exports.up = knex => knex.schema.createTable('drugstores', table => {
     table.uuid('drugstore_id').primary();
+    table.string('image').notNullable();
     table.text('name').notNullable();
     table.string('email').notNullable();
     table.string('whatsapp').notNullable();
