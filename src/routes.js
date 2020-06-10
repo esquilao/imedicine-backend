@@ -12,7 +12,10 @@ const drugstoreUpload = multer(storage('drugstores'));
 routes.post('/auth', authController.authorizate);
 
 //rotas das farmácias
+
 routes.delete('/drugstores/:id', drugstoreController.delete);
+
+routes.delete('/drugstores', drugstoreController.deleteAll);
 
 routes.get('/drugstores/:id', drugstoreController.getById);
 
@@ -33,6 +36,6 @@ routes.post('/medicines', medicineUpload.single('image') ,medicineController.cre
 
 routes.delete('/medicines/:id', medicineController.delete);
 
-routes.put('/medicines/:id', medicineController.change);
+routes.put('/medicines/:id',  drugstoreUpload.single('image'), medicineController.change);
 
 module.exports = routes;

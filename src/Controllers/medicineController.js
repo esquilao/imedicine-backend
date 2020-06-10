@@ -75,7 +75,7 @@ module.exports = {
     async delete(req, res) {
 
             const {id} = req.params;
-
+        
             const response = await connection('medicines')
             .where('product_id', id)
             .delete()
@@ -87,25 +87,36 @@ module.exports = {
     },
     
     async change(req, res) {
+        
+        const data2 = new FormData();
+        
+        data2.append('image', fs.createReadStream(req.file.path));
 
+        
+        const response = await imgurApi.post( '/3/upload', data2, { headers: {
+            "Content-Type": `multipart/form-data; boundary=${data2._boundary}` , 
+            "Authorization" : "Client-ID f573d680751f416"
+        }})
+    
         const drugstore_id = req.headers.authorization;
         const product_id = req.params.id;
-
+        
         const {
             name,
-            price
+            price,
         } = req.body;
 
         const data = {
             name,
             price,
-            product_id
+            product_id,
+            image: response.data.data.link,
         }
 
         const dados = Object.entries(data);
         const dadosEmArray= dados.filter( (e) => {
             return e[1] !== null});
-            console.log(dadosEmArray)
+            
         const dadosEmJson = dadosEmArray.reduce( (acc, curr) => {
            return {
                ...acc,
@@ -119,6 +130,6 @@ module.exports = {
             .update(dadosEmJson)
 
             return res.json({ atualizado : 'voce atualizou'})
-
+    
     }
 }

@@ -2,12 +2,13 @@ const connection = require('../database/connection');
 
 module.exports = {
 
-   /* async authorizate (req, res) {
+     async authorizate (req, res) {
 
-        const { id } =  req.body;
+        const { email , password } =  req.body;
 
         const drugstore = await connection('drugstores')
-        .where('drugstore_id', id)
+        .where('email', email)
+        .where('password', password)
         .select('*')
         .first();
         
@@ -16,7 +17,7 @@ module.exports = {
             return res.status(400).json({error: 'nao achei'})
         }
         return res.json(drugstore);
-    }, */
+    }, 
     
     async getProfile(req, res) {
         

@@ -10,8 +10,9 @@ module.exports = {
         const image = req.file;
         
         const {
-            name,
             email,
+            password,
+            name,
             whatsapp,
             city,
             state,
@@ -20,24 +21,24 @@ module.exports = {
             
         await connection('drugstores').insert({
             drugstore_id,
-            name,
             email,
+            password,
+            name,
             image : image.path,
             whatsapp,
             city,
             state,
             address,
         })
-        
-        return res.json({drugstore_id});
-        
+        return res.send('bullet');
     },
 
     async getById(req, res){
        const {id}  = req.params;
 
        const index = await connection('drugstores')
-       .select('*').where('drugstore_id', id)
+       .select('*')
+       .where('drugstore_id', id)
         
         if(!index) {
             return res.status(500).json({error : 'Não tem farmácias cadastradas'})
@@ -67,6 +68,17 @@ module.exports = {
             return res.status(500).json({error : 'Não tem fármacia com esse id'})
         }
         return res.json({ deletado : 'você deletou uma fármacia'})
+    },
+
+    async deleteAll(req, res) {
+
+        const del = await connection('drugstores')
+        .delete('*')
+
+        if(!del){
+            return res.status(500).json({error : 'Não tem fármacia'})
+        }
+        return res.json({ deletado : 'você deletou todas as farmacias'})
     },
 
     async change(req, res) {
