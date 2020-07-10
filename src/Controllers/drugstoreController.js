@@ -1,13 +1,24 @@
 const connection = require('../database/connection');
 const uuid = require('uuid');
 const multer = require('multer');
+const FormData = require('form-data');
+const fs = require('fs');
+const imgurApi = require('../services/imgurApi/api');
 
 module.exports = {
     
     async create(req, res) {
         
+        const data = new FormData();
+        
+        data.append('image', fs.createReadStream(req.file.path));
+        
+        const response = await imgurApi.post( '/3/upload', data , { headers: {
+            "Content-Type": `multipart/form-data; boundary=${data._boundary}` , 
+            "Authorization" : "Client-ID f573d680751f416"
+        }})
+
         const drugstore_id = uuid.v4();
-        const image = req.file;
         
         const {
             email,
@@ -19,18 +30,29 @@ module.exports = {
             address,
             } = req.body;
             
+            
+        const validate  = await connection('drugstores')
+        .where('email', email)
+        .select('name')
+        console.log(validate.length)
+
+        if(validate.length === 0) { 
         await connection('drugstores').insert({
             drugstore_id,
             email,
             password,
             name,
-            image : image.path,
+            image : response.data.data.link,
             whatsapp,
             city,
             state,
-            address,
+            address, 
         })
-        return res.send('bullet');
+        return res.json({bala : 'bullet'});
+    }
+    else {
+        return res.status(500).send({erro : 'email invalido'})
+    } 
     },
 
     async getById(req, res){
