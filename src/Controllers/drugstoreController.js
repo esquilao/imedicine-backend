@@ -130,7 +130,6 @@ module.exports = {
        const filteredEntries =  entries.filter( (en) => {
             return en[1] != null;
         })
-        console.log(filteredEntries);
         const objeto = filteredEntries.reduce( (acc , curr) => {
             return {
                 ...acc,
@@ -138,7 +137,6 @@ module.exports = {
              }
 
         },{})
-        console.log(objeto)
 
         const drugstore = await connection('drugstores')
         .select('*')
