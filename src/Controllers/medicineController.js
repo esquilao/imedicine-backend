@@ -49,7 +49,8 @@ module.exports = {
 
         const {
           name,
-          price
+          price,
+          quantity
         } = req.body;
 
         await connection('medicines')
@@ -57,6 +58,7 @@ module.exports = {
           product_id,  
           name,
           price,
+          quantity,
           image: response.data.data.link,
           drugstore_id   
         })
@@ -104,11 +106,13 @@ module.exports = {
         const {
             name,
             price,
+            quantity
         } = req.body;
 
         const data = {
             name,
             price,
+            quantity,
             product_id,
             image: response.data.data.link,
         }

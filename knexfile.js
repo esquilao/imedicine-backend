@@ -6,8 +6,8 @@ module.exports = {
     client: 'pg',
     connection: {
       database: 'test_imedicine',
-      user:     'teste',
-      password: 'senhateste'
+      user:     'postgres',
+      password: 'esquilow12'
     },
    
     migrations: {

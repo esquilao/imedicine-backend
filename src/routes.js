@@ -15,7 +15,7 @@ routes.post('/auth', celebrate({
         email : Joi.string().email().required(),
         password : Joi.string().token().required()
     })
-}) ,authController.authorizate);
+}) ,authController.authenticate);
 
 //rotas das farmácias
 
@@ -28,6 +28,8 @@ routes.get('/drugstores/:id', drugstoreController.getById);
 routes.get('/drugstores', drugstoreController.getAll);
 
 routes.post('/Solicit', authController.HandleRequest);
+
+routes.post('/AlterPassword/:token', authController.ChangePassword);
 
 routes.post('/drugstores', drugstoreUpload.single('image'), celebrate({
     [Segments.BODY]: Joi.object().keys({
@@ -54,9 +56,9 @@ routes.put('/drugstores/:id',  celebrate({
 })  , drugstoreController.change);
 
 //rotas dos medicamentos
-routes.get('/medicines', medicineController.getAll);
+routes.get('/medicines',medicineController.getAll);
 
-routes.get('/profile', authController.getProfile);
+routes.get('/profile',authController.getProfile);
 
 routes.get('/image', authController.getDrugstoreImage);
 
@@ -66,15 +68,17 @@ routes.post('/medicines', medicineUpload.single('image') , celebrate({
     [Segments.BODY]: Joi.object().keys({
         name : Joi.string().required(),
         price : Joi.number().precision(2).required(),
+        quantity : Joi.number().required()
     })
 }) , medicineController.create);
 
 routes.delete('/medicines/:id', medicineController.delete);
 
-routes.put('/medicines/:id',  drugstoreUpload.single('image'), celebrate({
+routes.put('/medicines/:id', drugstoreUpload.single('image'), celebrate({
     [Segments.BODY]: Joi.object().keys({
         name : Joi.string().required(),
-        price : Joi.number().precision(2).required()
+        price : Joi.number().precision(2).required(),
+        quantity : Joi.number().required()
     })
 })  , medicineController.change);
 
