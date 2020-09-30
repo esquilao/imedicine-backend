@@ -23,7 +23,7 @@ routes.delete('/drugstores/:id', drugstoreController.delete);
 
 routes.delete('/drugstores', drugstoreController.deleteAll);
 
-routes.get('/drugstores/:id', drugstoreController.getById);
+routes.get('/drugstores/:name', drugstoreController.getByName);
 
 routes.get('/drugstores', drugstoreController.getAll);
 

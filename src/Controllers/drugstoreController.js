@@ -55,12 +55,12 @@ module.exports = {
     } 
     },
 
-    async getById(req, res){
-       const {id}  = req.params;
+    async getByName(req, res){
+       const {name}  = req.params;
 
        const index = await connection('drugstores')
        .select('*')
-       .where('drugstore_id', id)
+       .where('name', name)
         
         if(!index) {
             return res.status(500).json({error : 'Não tem farmácias cadastradas'})
